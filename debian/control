@@ -1,0 +1,19 @@
+Source: quickpic
+Section: libs
+Maintainer: Alexander Rutz <alex@familyrutz.com>
+Priority: optional
+Build-Depends: qt5-qmake,
+               qtbase5-dev,
+               qtdeclarative5-dev,
+               libqt5multimedia5-plugins,
+               qttools5-dev-tools,
+               libz-dev,
+               qtmultimedia5-dev
+Standards-Version: 4.5.1
+
+Package: quickpic
+Architecture: any
+Multi-Arch: foreign
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}, qml-module-qtmultimedia, libqt5multimedia5-plugins, qml-module-qtquick2, qml-module-qtquick-controls2, qml-module-qtquick-window2, qt5-cameraplugin-aal
+Description: Take quick pictures on droidian

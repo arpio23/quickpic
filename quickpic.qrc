@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>CaptureButton.qml</file>
+        <file>CameraSelect.qml</file>
+        <file>Resolution.qml</file>
+        <file>CameraListPopup.qml</file>
+        <file>ResolutionListPopup.qml</file>
+        <file>Popup.qml</file>
+    </qresource>
+</RCC>
