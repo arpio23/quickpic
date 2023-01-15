@@ -7,5 +7,6 @@
         <file>CameraListPopup.qml</file>
         <file>ResolutionListPopup.qml</file>
         <file>Popup.qml</file>
+        <file>ZoomControl.qml</file>
     </qresource>
 </RCC>

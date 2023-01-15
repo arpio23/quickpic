@@ -104,4 +104,9 @@ Window {
                     font.pixelSize: 14
                 }
     }
+
+    ZoomControl {
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+    }
 }
