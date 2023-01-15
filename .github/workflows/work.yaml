@@ -47,7 +47,7 @@ jobs:
                                                     apt update && 
                                                     set DEB_BUILD_OPTIONS=nocheck && 
                                                     mk-build-deps --install --tool='apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' debian/control && 
-                                                    rm -f quickpic-build-deps_0.0.1_a*.* && 
+                                                    rm -f quickpic-build-deps*.* && 
                                                     dpkg-buildpackage -us -uc -b && 
                                                     cp ../*.deb out/"
           

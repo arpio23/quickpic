@@ -2,7 +2,7 @@ Source: quickpic
 Section: libs
 Maintainer: Alexander Rutz <alex@familyrutz.com>
 Priority: optional
-Build-Depends: qt5-qmake,
+Build-Depends: cmake,
                qtbase5-dev,
                qtdeclarative5-dev,
                libqt5multimedia5-plugins,
