@@ -24,3 +24,5 @@ add_executable(
 )
 
 target_link_libraries(quickpic Qt5::Core Qt5::Widgets Qt5::Quick Qt5::Qml)
+
+install(TARGETS ${PROJECT_NAME} DESTINATION /usr/bin)
