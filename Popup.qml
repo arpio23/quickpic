@@ -20,7 +20,7 @@ Rectangle {
             name: "visible"
             PropertyChanges { target: popup; opacity: 1.0 }
         }
-    ]
+        ]
 
     transitions: Transition {
         NumberAnimation { properties: "opacity"; duration: 100 }

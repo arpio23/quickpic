@@ -42,37 +42,36 @@ Window {
         autoOrientation: true
 
         PinchArea
-    {
-
-        property int oldZoom
-
-        MouseArea
         {
-            id:dragArea
-            hoverEnabled: true
-            anchors.fill: parent
-            scrollGestureEnabled: false
-        }
-        anchors.fill:parent
-        enabled: true
-        pinch.dragAxis: pinch.XAndYAxis
-        pinch.maximumX: parent.width
-        pinch.maximumY: parent.height
-        pinch.maximumScale: 2.0
-        pinch.minimumScale: 0.0
+            property int oldZoom
 
-        onPinchStarted: {
-            oldZoom = camera.digitalZoom
-        }
+            MouseArea
+            {
+                id:dragArea
+                hoverEnabled: true
+                anchors.fill: parent
+                scrollGestureEnabled: false
+            }
+            anchors.fill:parent
+            enabled: true
+            pinch.dragAxis: pinch.XAndYAxis
+            pinch.maximumX: parent.width
+            pinch.maximumY: parent.height
+            pinch.maximumScale: 2.0
+            pinch.minimumScale: 0.0
 
-        onPinchUpdated: {
-            var newZoom = (Math.round(pinch.scale * 10) - 10) + oldZoom
+            onPinchStarted: {
+                oldZoom = camera.digitalZoom
+            }
 
-            if(newZoom >= 0 && newZoom < camera.maximumDigitalZoom){
-                camera.setDigitalZoom(newZoom)
+            onPinchUpdated: {
+                var newZoom = (Math.round(pinch.scale * 10) - 10) + oldZoom
+
+                if(newZoom >= 0 && newZoom < camera.maximumDigitalZoom){
+                    camera.setDigitalZoom(newZoom)
+                }
             }
         }
-    }
     }
 
 
@@ -87,9 +86,9 @@ Window {
             onValueChanged: {
                 camera.deviceId = value
                 resolutionModel.clear()
-            for (var p in camera.imageCapture.supportedResolutions){
-                resolutionModel.append({"widthR": camera.imageCapture.supportedResolutions[p].width, "heightR": camera.imageCapture.supportedResolutions[p].height})
-            } 
+                for (var p in camera.imageCapture.supportedResolutions){
+                    resolutionModel.append({"widthR": camera.imageCapture.supportedResolutions[p].width, "heightR": camera.imageCapture.supportedResolutions[p].height})
+                } 
             }
             Layout.alignment : Qt.AlignHCenter
             //anchors.verticalCenter: parent.verticalCenter
@@ -113,29 +112,29 @@ Window {
     }
 
     Rectangle {
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.margins: 5
-                width: 200
-                height: 40
-                color: "#99000000"
-                border.width: 2
-                border.color: "lightblue"
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.margins: 5
+        width: 200
+        height: 40
+        color: "#99000000"
+        border.width: 2
+        border.color: "lightblue"
 
-                Text {
-                    text: camera.viewfinder.resolution.width + "x" + camera.viewfinder.resolution.height
+        Text {
+            text: camera.viewfinder.resolution.width + "x" + camera.viewfinder.resolution.height
 
-                    anchors.fill: parent
-                    anchors.margins: 5
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                    color: "white"
-                    font.bold: true
-                    style: Text.Raised
-                    styleColor: "black"
-                    font.pixelSize: 14
-                }
+            anchors.fill: parent
+            anchors.margins: 5
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+            color: "white"
+            font.bold: true
+            style: Text.Raised
+            styleColor: "black"
+            font.pixelSize: 14
+        }
     }
 
     ZoomControl {
