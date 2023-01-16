@@ -8,6 +8,9 @@ int main(int argc, char *argv[])
 #endif
 
     QGuiApplication app(argc, argv);
+    app.setOrganizationName("quickpic");
+    app.setOrganizationDomain("github.com/arpio23/quickpic");
+    app.setApplicationName("quickpic");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

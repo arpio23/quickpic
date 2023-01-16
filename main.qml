@@ -4,6 +4,7 @@ import QtQuick.Window 2.12
 import QtGraphicalEffects 1.0
 import QtMultimedia 5.15
 import QtQuick.Layouts 1.15
+import Qt.labs.settings 1.0
 
 Window {
     id : mainWindow
@@ -12,6 +13,13 @@ Window {
     height: 800
     visible: true
     color: "black"
+
+    Settings {
+        id: settings
+        property int resolutionId: 0
+        property int cameraId: 0
+
+    }
 
     ListModel {
         id: resolutionModel
@@ -26,13 +34,12 @@ Window {
         }
 
         Component.onCompleted: {
-
-            console.log("MAXZOOM: ", camera.maximumDigitalZoom)
+            camera.deviceId = settings.cameraId
             resolutionModel.clear()
             for (var p in camera.imageCapture.supportedResolutions){
                 resolutionModel.append({"widthR": camera.imageCapture.supportedResolutions[p].width, "heightR": camera.imageCapture.supportedResolutions[p].height})
-            }     
-
+            }
+            camera.imageCapture.resolution = camera.imageCapture.supportedResolutions[settings.resolutionId]
         }
     }
 
@@ -85,24 +92,25 @@ Window {
             model: QtMultimedia.availableCameras
             onValueChanged: {
                 camera.deviceId = value
+                settings.setValue("cameraId", value)
                 resolutionModel.clear()
                 for (var p in camera.imageCapture.supportedResolutions){
                     resolutionModel.append({"widthR": camera.imageCapture.supportedResolutions[p].width, "heightR": camera.imageCapture.supportedResolutions[p].height})
                 } 
             }
             Layout.alignment : Qt.AlignHCenter
-            //anchors.verticalCenter: parent.verticalCenter
         }
 
         CaptureButton {
             Layout.alignment : Qt.AlignHCenter
-            //anchors.centerIn: parent
         }
 
         Resolution {
+            id: resolutionButton
+
             onValueChanged: {
                 camera.imageCapture.resolution = camera.imageCapture.supportedResolutions[value]
-                console.log("ERROR: " + camera.viewfinder.resolution)
+                settings.setValue("resolutionId", value)
             }
 
             Layout.alignment : Qt.AlignHCenter
