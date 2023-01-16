@@ -11,7 +11,9 @@ Item {
 
     Button {
         id: btnResolution
-        anchors.fill: parent
+        anchors.centerIn: parent
+        implicitWidth: parent.width
+        implicitHeight: parent.height
         icon.name: "applications-system-symbolic"
         icon.width: Math.round(btnResolution.width * 0.5)
         icon.height: Math.round(btnResolution.height * 0.5)
@@ -26,7 +28,7 @@ Item {
         }
 
         onClicked: {
-            
+
             popup.toggle()
         }
     }

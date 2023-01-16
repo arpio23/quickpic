@@ -12,7 +12,9 @@ Item {
 
     Button {
         id: btnCameraSelect
-        anchors.fill: parent
+        anchors.centerIn: parent
+        implicitWidth: parent.width
+        implicitHeight: parent.height
         icon.name: "emblem-synchronizing-symbolic"
         icon.width: Math.round(btnCameraSelect.width * 0.5)
         icon.height: Math.round(btnCameraSelect.height * 0.5)
