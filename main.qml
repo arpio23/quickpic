@@ -26,10 +26,11 @@ Window {
         }
 
         Component.onCompleted: {
+
+            console.log("MAXZOOM: ", camera.maximumDigitalZoom)
             resolutionModel.clear()
             for (var p in camera.imageCapture.supportedResolutions){
                 resolutionModel.append({"widthR": camera.imageCapture.supportedResolutions[p].width, "heightR": camera.imageCapture.supportedResolutions[p].height})
-                console.log("stateP", camera.imageCapture.supportedResolutions[p].width, "x", camera.imageCapture.supportedResolutions[p].height)
             }     
 
         }
@@ -39,6 +40,39 @@ Window {
         anchors.fill: parent
         source: camera
         autoOrientation: true
+
+        PinchArea
+    {
+
+        property int oldZoom
+
+        MouseArea
+        {
+            id:dragArea
+            hoverEnabled: true
+            anchors.fill: parent
+            scrollGestureEnabled: false
+        }
+        anchors.fill:parent
+        enabled: true
+        pinch.dragAxis: pinch.XAndYAxis
+        pinch.maximumX: parent.width
+        pinch.maximumY: parent.height
+        pinch.maximumScale: 2.0
+        pinch.minimumScale: 0.0
+
+        onPinchStarted: {
+            oldZoom = camera.digitalZoom
+        }
+
+        onPinchUpdated: {
+            var newZoom = (Math.round(pinch.scale * 10) - 10) + oldZoom
+
+            if(newZoom >= 0 && newZoom < camera.maximumDigitalZoom){
+                camera.setDigitalZoom(newZoom)
+            }
+        }
+    }
     }
 
 
@@ -55,7 +89,6 @@ Window {
                 resolutionModel.clear()
             for (var p in camera.imageCapture.supportedResolutions){
                 resolutionModel.append({"widthR": camera.imageCapture.supportedResolutions[p].width, "heightR": camera.imageCapture.supportedResolutions[p].height})
-                console.log("stateP", camera.imageCapture.supportedResolutions[p].width, "x", camera.imageCapture.supportedResolutions[p].height)
             } 
             }
             Layout.alignment : Qt.AlignHCenter
