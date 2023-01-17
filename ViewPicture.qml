@@ -11,12 +11,53 @@ Rectangle {
     color: "black"
     visible: false
 
-    Image {
-        id: view
+    Flickable {
+        id: flick
         anchors.fill: parent
-        autoTransform: true
-        fillMode: Image.PreserveAspectFit
-        smooth: true
+        contentWidth: parent.width*2
+        contentHeight: parent.height*2
+        boundsBehavior: Flickable.StopAtBounds
+        clip: true
+
+        Item {
+            id: imgItm
+
+            width: Math.max(view.width * view.scale, flick.width)
+            height: Math.max(view.height * view.scale, flick.height)
+
+            Image {
+                id: view
+                anchors.centerIn: parent
+                autoTransform: true
+                transformOrigin: Item.Center
+                fillMode: Image.PreserveAspectFit
+                smooth: true
+
+                onSourceChanged: {
+                    view.scale = 1
+                }
+            }
+        }
+    }
+
+    PinchArea {
+        anchors.fill: flick
+        pinch.target: view
+        pinch.maximumScale: 2
+        pinch.minimumScale: 0.1
+        pinch.dragAxis: Pinch.XandYAxis
+        
+        onPinchStarted: {
+        }
+
+        onPinchUpdated: {
+            flick.contentX += pinch.previousCenter.x - pinch.center.x
+            flick.contentY += pinch.previousCenter.y - pinch.center.y
+        }
+
+        onPinchFinished: {
+            flick.returnToBounds();
+        }
     }
 
     RowLayout {
