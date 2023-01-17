@@ -16,9 +16,8 @@ Window {
 
     Settings {
         id: settings
-        property int resolutionId: 0
         property int cameraId: 0
-
+        property var resArray: []
     }
 
     ListModel {
@@ -39,12 +38,20 @@ Window {
         }
 
         Component.onCompleted: {
+            
+            if(!settings.resArray.length || (settings.resArray.length < QtMultimedia.availableCameras.length)) {
+                var arr = []
+                for (var i = 0; i < QtMultimedia.availableCameras.length; i++){
+                    arr.push(0)
+                }
+                settings.setValue("resArray", arr)
+            }
             camera.deviceId = settings.cameraId
             resolutionModel.clear()
             for (var p in camera.imageCapture.supportedResolutions){
                 resolutionModel.append({"widthR": camera.imageCapture.supportedResolutions[p].width, "heightR": camera.imageCapture.supportedResolutions[p].height})
             }
-            camera.imageCapture.resolution = camera.imageCapture.supportedResolutions[settings.resolutionId]
+            camera.imageCapture.resolution = camera.imageCapture.supportedResolutions[settings.resArray[camera.deviceId]]
         }
     }
 
@@ -132,7 +139,9 @@ RowLayout {
             resolutionModel.clear()
             for (var p in camera.imageCapture.supportedResolutions){
                 resolutionModel.append({"widthR": camera.imageCapture.supportedResolutions[p].width, "heightR": camera.imageCapture.supportedResolutions[p].height})
-            } 
+            }
+
+            camera.imageCapture.resolution = camera.imageCapture.supportedResolutions[settings.resArray[camera.deviceId]]
         }
         Layout.alignment : Qt.AlignHCenter
     }
@@ -146,7 +155,8 @@ RowLayout {
 
         onValueChanged: {
             camera.imageCapture.resolution = camera.imageCapture.supportedResolutions[value]
-            settings.setValue("resolutionId", value)
+            settings.resArray[camera.deviceId] = value
+            settings.setValue("resArray", settings.resArray)
         }
 
         Layout.alignment : Qt.AlignHCenter
