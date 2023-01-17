@@ -20,5 +20,7 @@ Button {
         radius: 90
     }
 
-    onClicked: camera.imageCapture.capture()
+    onClicked: {
+        camera.imageCapture.capture()
+    }
 }

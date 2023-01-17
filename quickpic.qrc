@@ -8,5 +8,6 @@
         <file>ResolutionListPopup.qml</file>
         <file>Popup.qml</file>
         <file>ZoomControl.qml</file>
+        <file>ViewPicture.qml</file>
     </qresource>
 </RCC>

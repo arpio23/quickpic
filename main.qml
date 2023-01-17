@@ -28,6 +28,13 @@ Window {
         id: camera
         captureMode: Camera.CaptureStillImage
 
+        imageCapture {
+            onImageSaved: {
+                photoView.source = Qt.resolvedUrl("file:"+path)
+                photoView.visible = true
+            }
+        }
+
         focus {
             focusMode: Camera.FocusMacro
             focusPointMode: Camera.FocusPointCustom
@@ -38,7 +45,7 @@ Window {
         }
 
         Component.onCompleted: {
-            
+
             if(!settings.resArray.length || (settings.resArray.length < QtMultimedia.availableCameras.length)) {
                 var arr = []
                 for (var i = 0; i < QtMultimedia.availableCameras.length; i++){
@@ -66,133 +73,141 @@ Window {
             border {
               width: 4
               color: "steelblue"
-          }
-          color: "transparent"
-          radius: 90
-          width: 100
-          height: 100
-          visible: false
+            }
+            color: "transparent"
+            radius: 90
+            width: 100
+            height: 100
+            visible: false
 
-          Timer {
-            id: visTm
-            interval: 2000; running: false; repeat: false
-            onTriggered: focusPointRect.visible = false
+            Timer {
+                id: visTm
+                interval: 2000; running: false; repeat: false
+                onTriggered: focusPointRect.visible = false
+            }
         }
     }
-}
 
-PinchArea
-{
-    property int oldZoom
-
-    MouseArea
+    PinchArea
     {
-        id:dragArea
-        hoverEnabled: true
-        anchors.fill: parent
-        scrollGestureEnabled: false
+        property int oldZoom
+        enabled: !photoView.visible
 
-        onClicked: {
-            camera.focus.customFocusPoint = Qt.point(mouse.x/dragArea.width, mouse.y/dragArea.height)
-            camera.focus.focusMode = Camera.FocusMacro
-            focusPointRect.visible = true
-            focusPointRect.x = mouse.x - (focusPointRect.width/2)
-            focusPointRect.y = mouse.y - (focusPointRect.height/2)
-            visTm.start()
-            camera.searchAndLock()
+        MouseArea
+        {
+            id:dragArea
+            hoverEnabled: true
+            anchors.fill: parent
+            scrollGestureEnabled: false
+
+            onClicked: {
+                camera.focus.customFocusPoint = Qt.point(mouse.x/dragArea.width, mouse.y/dragArea.height)
+                camera.focus.focusMode = Camera.FocusMacro
+                focusPointRect.visible = true
+                focusPointRect.x = mouse.x - (focusPointRect.width/2)
+                focusPointRect.y = mouse.y - (focusPointRect.height/2)
+                visTm.start()
+                camera.searchAndLock()
+            }
         }
-    }
-    anchors.fill:parent
-    enabled: true
-    pinch.dragAxis: pinch.XAndYAxis
-    pinch.maximumX: parent.width
-    pinch.maximumY: parent.height
-    pinch.maximumScale: 2.0
-    pinch.minimumScale: 0.0
+        anchors.fill:parent
+        pinch.dragAxis: pinch.XAndYAxis
+        pinch.maximumX: parent.width
+        pinch.maximumY: parent.height
+        pinch.maximumScale: 2.0
+        pinch.minimumScale: 0.0
 
-    onPinchStarted: {
-        oldZoom = camera.digitalZoom
-    }
-
-    onPinchUpdated: {
-        var newZoom = (Math.round(pinch.scale * 10) - 10) + oldZoom
-
-        if(newZoom >= 0 && newZoom < camera.maximumDigitalZoom){
-            camera.setDigitalZoom(newZoom)
+        onPinchStarted: {
+            oldZoom = camera.digitalZoom
         }
+
+        onPinchUpdated: {
+            var newZoom = (Math.round(pinch.scale * 10) - 10) + oldZoom
+
+            if(newZoom >= 0 && newZoom < camera.maximumDigitalZoom){
+                camera.setDigitalZoom(newZoom)
+            }
+        }
+        
     }
-    
-}
 
 
-RowLayout {
-    width: parent.width
-    height: 100
-    anchors.bottom: parent.bottom
-    anchors.horizontalCenter: parent.horizontalCenter
+    RowLayout {
+        width: parent.width
+        height: 100
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        visible: !photoView.visible
 
-    CameraSelect {
-        model: QtMultimedia.availableCameras
-        onValueChanged: {
-            camera.deviceId = value
-            settings.setValue("cameraId", value)
-            resolutionModel.clear()
-            for (var p in camera.imageCapture.supportedResolutions){
-                resolutionModel.append({"widthR": camera.imageCapture.supportedResolutions[p].width, "heightR": camera.imageCapture.supportedResolutions[p].height})
+        CameraSelect {
+            model: QtMultimedia.availableCameras
+            onValueChanged: {
+                camera.deviceId = value
+                settings.setValue("cameraId", value)
+                resolutionModel.clear()
+                for (var p in camera.imageCapture.supportedResolutions){
+                    resolutionModel.append({"widthR": camera.imageCapture.supportedResolutions[p].width, "heightR": camera.imageCapture.supportedResolutions[p].height})
+                }
+
+                camera.imageCapture.resolution = camera.imageCapture.supportedResolutions[settings.resArray[camera.deviceId]]
+            }
+            Layout.alignment : Qt.AlignHCenter
+        }
+
+        CaptureButton {
+            Layout.alignment : Qt.AlignHCenter
+        }
+
+        Resolution {
+            id: resolutionButton
+
+            onValueChanged: {
+                camera.imageCapture.resolution = camera.imageCapture.supportedResolutions[value]
+                settings.resArray[camera.deviceId] = value
+                settings.setValue("resArray", settings.resArray)
             }
 
-            camera.imageCapture.resolution = camera.imageCapture.supportedResolutions[settings.resArray[camera.deviceId]]
+            Layout.alignment : Qt.AlignHCenter
+
+
         }
-        Layout.alignment : Qt.AlignHCenter
     }
 
-    CaptureButton {
-        Layout.alignment : Qt.AlignHCenter
-    }
-
-    Resolution {
-        id: resolutionButton
-
-        onValueChanged: {
-            camera.imageCapture.resolution = camera.imageCapture.supportedResolutions[value]
-            settings.resArray[camera.deviceId] = value
-            settings.setValue("resArray", settings.resArray)
-        }
-
-        Layout.alignment : Qt.AlignHCenter
-
-
-    }
-}
-
-Rectangle {
-    anchors.top: parent.top
-    anchors.left: parent.left
-    anchors.margins: 5
-    width: 200
-    height: 40
-    color: "#99000000"
-    border.width: 2
-    border.color: "lightblue"
-
-    Text {
-        text: camera.viewfinder.resolution.width + "x" + camera.viewfinder.resolution.height
-
-        anchors.fill: parent
+    Rectangle {
+        anchors.top: parent.top
+        anchors.left: parent.left
         anchors.margins: 5
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
-        color: "white"
-        font.bold: true
-        style: Text.Raised
-        styleColor: "black"
-        font.pixelSize: 14
-    }
-}
+        width: 200
+        height: 40
+        color: "#99000000"
+        border.width: 2
+        border.color: "lightblue"
 
-ZoomControl {
-    anchors.right: parent.right
-    anchors.verticalCenter: parent.verticalCenter
-}
+        Text {
+            text: camera.viewfinder.resolution.width + "x" + camera.viewfinder.resolution.height
+
+            anchors.fill: parent
+            anchors.margins: 5
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+            color: "white"
+            font.bold: true
+            style: Text.Raised
+            styleColor: "black"
+            font.pixelSize: 14
+        }
+    }
+
+    ZoomControl {
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+    }
+
+    ViewPicture {
+        id : photoView
+        anchors.fill : parent
+        onClosed: camera.start()
+        focus: visible
+    }
 }
