@@ -30,7 +30,6 @@ Window {
 
         imageCapture {
             onImageSaved: {
-                photoView.source = Qt.resolvedUrl("file:"+path)
                 photoView.visible = true
             }
         }

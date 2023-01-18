@@ -15,5 +15,5 @@ Package: quickpic
 Architecture: any
 Multi-Arch: foreign
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends}, ${shlibs:Depends}, qml-module-qtmultimedia, libqt5multimedia5-plugins, qml-module-qtquick2, qml-module-qtquick-controls2, qml-module-qtquick-window2, qt5-cameraplugin-aal
+Depends: ${misc:Depends}, ${shlibs:Depends}, qml-module-qtmultimedia, libqt5multimedia5-plugins, qml-module-qtquick2, qml-module-qtquick-controls2, qml-module-qtquick-window2, qt5-cameraplugin-aal, qml-module-qt-labs-platform, qml-module-qt-labs-folderlistmodel
 Description: Take quick pictures on droidian
