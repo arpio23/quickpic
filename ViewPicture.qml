@@ -33,8 +33,11 @@ Rectangle {
                 fillMode: Image.PreserveAspectFit
                 smooth: true
 
-                onSourceChanged: {
-                    view.scale = 1
+                onStatusChanged: {
+                    if (view.status == Image.Ready){
+                        view.scale = Math.min(flick.width/view.width, flick.height/view.height, 1)
+                        flick.returnToBounds()
+                    }
                 }
             }
         }
