@@ -8,6 +8,7 @@ import Qt.labs.platform 1.1
 Rectangle {
     id: viewRect
     property int index: 0
+    property var lastImg: imgModel.get(viewRect.index, "fileUrl")
     signal closed
 
     color: "black"
@@ -115,6 +116,7 @@ Rectangle {
 
             onClicked: {
                 viewRect.visible = false
+                viewRect.index = imgModel.count - 1
                 viewRect.closed();
             }
         }

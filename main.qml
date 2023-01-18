@@ -28,12 +28,6 @@ Window {
         id: camera
         captureMode: Camera.CaptureStillImage
 
-        imageCapture {
-            onImageSaved: {
-                photoView.visible = true
-            }
-        }
-
         focus {
             focusMode: Camera.FocusMacro
             focusPointMode: Camera.FocusPointCustom
@@ -130,6 +124,7 @@ Window {
 
 
     RowLayout {
+        id: btnRow
         width: parent.width
         height: 100
         anchors.bottom: parent.bottom
@@ -194,9 +189,51 @@ Window {
         }
     }
 
-    ZoomControl {
+    Rectangle {
+        id: imgBtn
         anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.bottom: btnRow.top
+        anchors.margins: 5
+        width: 100
+        height: 100
+        color: "black"
+
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Item {
+                width: imgBtn.width
+                height: imgBtn.height
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: imgBtn.adapt ? imgBtn.width : Math.min(imgBtn.width, imgBtn.height)
+                    height: imgBtn.adapt ? imgBtn.height : width
+                    radius: 90
+                    
+                }
+            }
+        }
+
+        Image {
+            anchors.centerIn: parent
+            autoTransform: true
+            transformOrigin: Item.Center
+            fillMode: Image.PreserveAspectFit
+            smooth: true
+            source: photoView.lastImg
+            scale: Math.min(parent.width/width, parent.height/height)
+        }
+    }
+
+    Rectangle {
+        anchors.fill: imgBtn
+        color: "transparent"
+        border.width: 2
+        border.color: "lightblue"
+        radius: 90
+        MouseArea {
+            anchors.fill: parent
+            onClicked: photoView.visible = true
+        }
     }
 
     ViewPicture {
