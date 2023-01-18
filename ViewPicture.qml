@@ -36,6 +36,8 @@ Rectangle {
                 onStatusChanged: {
                     if (view.status == Image.Ready){
                         view.scale = Math.min(flick.width/view.width, flick.height/view.height, 1)
+                        imgItm.x = 0
+                        imgItm.y = 0
                         flick.returnToBounds()
                     }
                 }
