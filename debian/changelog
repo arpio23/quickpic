@@ -1,3 +1,14 @@
+quickpic (0.0.1-5) unstable; urgency=medium
+
+  * Add a button to show Images.
+  * Remove ZoomControl buttons.
+  * Implement image zoom and drag.
+  * Improve camera zoom.
+  * Add PinchArea to image.
+  * Store resolution for each camera separately.
+
+ -- arpio23 <alex@familyrutz.com>  Wed, 18 Jan 2023 15:05:15 -0700
+
 quickpic (0.0.1-4) unstable; urgency=medium
 
   * Add focus option and use custom focus point
