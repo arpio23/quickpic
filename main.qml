@@ -88,6 +88,13 @@ Window {
         }
     }
 
+    Item {
+        id: camZoom
+        onScaleChanged: {
+            camera.setDigitalZoom(scale)
+        }
+    }
+
     PinchArea
     {
         property int oldZoom
@@ -112,21 +119,14 @@ Window {
         }
         anchors.fill:parent
         pinch.dragAxis: pinch.XAndYAxis
-        pinch.maximumX: parent.width
-        pinch.maximumY: parent.height
-        pinch.maximumScale: 2.0
-        pinch.minimumScale: 0.0
+        pinch.target: camZoom
+        pinch.maximumScale: camera.maximumDigitalZoom
+        pinch.minimumScale: 0
 
         onPinchStarted: {
-            oldZoom = camera.digitalZoom
         }
 
         onPinchUpdated: {
-            var newZoom = (Math.round(pinch.scale * 10) - 10) + oldZoom
-
-            if(newZoom >= 0 && newZoom < camera.maximumDigitalZoom){
-                camera.setDigitalZoom(newZoom)
-            }
         }
         
     }
