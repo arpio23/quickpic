@@ -44,8 +44,15 @@ Rectangle {
         anchors.fill: flick
         pinch.target: view
         pinch.maximumScale: 2
-        pinch.minimumScale: 0.1
+        pinch.minimumScale: 0
         pinch.dragAxis: Pinch.XandYAxis
+
+        MouseArea
+        {
+            anchors.fill: parent
+            drag.axis: Drag.XAndYAxis
+            drag.target: imgItm
+        }
         
         onPinchStarted: {
         }

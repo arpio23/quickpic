@@ -97,7 +97,6 @@ Window {
 
     PinchArea
     {
-        property int oldZoom
         enabled: !photoView.visible
 
         MouseArea
@@ -128,7 +127,6 @@ Window {
 
         onPinchUpdated: {
         }
-        
     }
 
 
@@ -168,8 +166,6 @@ Window {
             }
 
             Layout.alignment : Qt.AlignHCenter
-
-
         }
     }
 
