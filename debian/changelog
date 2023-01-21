@@ -1,3 +1,9 @@
+quickpic (0.0.1-6) unstable; urgency=medium
+
+  * Add missing dependencies
+
+ -- arpio23 <alex@familyrutz.com>  Sat, 21 Jan 2023 06:18:15 -0700
+
 quickpic (0.0.1-5) unstable; urgency=medium
 
   * Add a button to show Images.
