@@ -1,3 +1,9 @@
+quickpic (0.0.1-7) unstable; urgency=medium
+
+  * Add license header
+
+ -- arpio23 <alex@familyrutz.com>
+
 quickpic (0.0.1-6) unstable; urgency=medium
 
   * Add missing dependencies
